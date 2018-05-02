@@ -3,26 +3,20 @@ package com.dawit.android.ad340;
 import android.content.Context;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Layout;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class MovieList extends AppCompatActivity {
     RecyclerView recyclerView;
     LinearLayoutManager recylerViewLayoutManager;
     RecyclerViewAdapter recyclerViewAdapter;
     Context context;
-
+    RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +39,10 @@ public class MovieList extends AppCompatActivity {
 
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(12));
 
+        relativeLayout = findViewById(R.id.relativelayout);
+
+        recyclerView = findViewById(R.id.my_recycler_view);
+
         recylerViewLayoutManager = new LinearLayoutManager(context);
 
         recyclerView.setLayoutManager(recylerViewLayoutManager);
@@ -54,30 +52,6 @@ public class MovieList extends AppCompatActivity {
 
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
-        ActionBar actionbar = getSupportActionBar();
-        actionbar.setTitle("Movie List");
-        actionbar.setDisplayHomeAsUpEnabled(true);
-
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.settings_menu:
-                Toast.makeText(getApplicationContext(), "You clicked the setting button.", Toast.LENGTH_SHORT).show();
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-        return true;
-    }
 }
