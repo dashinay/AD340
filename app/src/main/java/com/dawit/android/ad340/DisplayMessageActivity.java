@@ -1,50 +1,45 @@
 package com.dawit.android.ad340;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class FullInfo extends AppCompatActivity {
-    RecyclerView recyclerView;
-    LinearLayoutManager recylerViewLayoutManager;
-    RecycleViewFullInfoAdapter recyclerViewAdapter;
-    Context context;
-    RelativeLayout relativeLayout;
+public class DisplayMessageActivity extends AppCompatActivity {
+
+    private static final String TAG = "DisplayMessageActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_full_info);
+        setContentView(R.layout.activity_display_message);
+        if (savedInstanceState != null) {
+            Log.d(TAG, "onCreate() Restoring previous state");
+            /* restore state */
+        } else {
+            Log.d(TAG, "onCreate() No saved state available");
+            /* initialize app */
+        }
+
+        // Get the Intent that started this activity and extract the string
         Intent intent = getIntent();
-        String[] movie = intent.getStringArrayExtra("Movie");
+        String message = intent.getStringExtra(Main.EXTRA_MESSAGE);
 
-        context = getApplicationContext();
-
-        relativeLayout = findViewById(R.id.relativelayout);
-
-        recyclerView = findViewById(R.id.my_recycler_view);
-
-        recylerViewLayoutManager = new LinearLayoutManager(context);
-
-        recyclerView.setLayoutManager(recylerViewLayoutManager);
-
-        recyclerViewAdapter = new RecycleViewFullInfoAdapter(context, movie);
-
-        recyclerView.setAdapter(recyclerViewAdapter);
+        // Capture the layout's TextView and set the string as its text
+        TextView textView = findViewById(R.id.textView);
+        textView.setText(message);
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setTitle("Full Movie Description");
+        actionbar.setTitle("Display Message");
         actionbar.setDisplayHomeAsUpEnabled(true);
     }
 
