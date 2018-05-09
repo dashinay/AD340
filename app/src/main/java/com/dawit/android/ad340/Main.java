@@ -1,6 +1,8 @@
 package com.dawit.android.ad340;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,7 +19,7 @@ import android.widget.Toast;
 
 public class Main extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.dawit.android.ad340.MESSAGE";
-
+    SharedPreferences sharedPref;
     DrawerLayout mDrawerLayout;
 
     @Override
@@ -59,14 +61,31 @@ public class Main extends AppCompatActivity {
 
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu_black_24px);
+
+        //get the previously stored entry
+        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        String defaultValue = "";
+        String savedInfo = sharedPref.getString(getString(R.string.main_shared_pref), defaultValue);
+        EditText editText = (EditText) findViewById(R.id.editText);
+        editText.setText(savedInfo);
     }
 
     public void sendMessage(View view) {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
+
+
         EditText editText = (EditText) findViewById(R.id.editText);
         String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+        //prevent from navigating to different activity
+        if(!message.isEmpty()) {
+            //save the entry before
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.main_shared_pref), message);
+            editor.commit();
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
+        }
+        Toast.makeText(getApplicationContext(),"Please enter the value", Toast.LENGTH_LONG).show();
     }
 
     @Override
