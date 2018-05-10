@@ -52,9 +52,6 @@ public class Main extends AppCompatActivity {
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
-                        // Add code here to update the UI based on the item selected
-                        // For example, swap UI fragments here
-
                         return true;
                     }
                 });
@@ -72,7 +69,6 @@ public class Main extends AppCompatActivity {
 
     public void sendMessage(View view) {
         Intent intent = new Intent(this, DisplayMessageActivity.class);
-
 
         EditText editText = (EditText) findViewById(R.id.editText);
         String message = editText.getText().toString();
