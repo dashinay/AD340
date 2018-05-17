@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dawit.android.ad340">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,24 +12,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ZombieLayout"
-            android:parentActivityName="com.dawit.android.ad340.Main">
-        </activity>
-        <activity android:name=".MovieList" android:parentActivityName="com.dawit.android.ad340.Main"/>
-        <activity android:name=".FullInfo" android:parentActivityName="com.dawit.android.ad340.MovieList"/>
-        <activity android:name=".Main">
+        <activity
+            android:name=".ZombieLayout"
+            android:parentActivityName=".Main" />
+        <activity
+            android:name=".MovieList"
+            android:parentActivityName=".Main" />
+        <activity
+            android:name=".FullInfo"
+            android:parentActivityName=".MovieList" />
+        <activity android:name=".Main"></activity>
+        <activity
+            android:name=".DisplayMessageActivity"
+            android:parentActivityName=".Main" />
+        <activity
+            android:name=".Info"
+            android:parentActivityName=".Main" />
+        <activity
+            android:name=".About"
+            android:parentActivityName=".Main" />
+        <activity android:name=".CameraLocations">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"></action>
+                <category android:name="android.intent.category.LAUNCHER"></category>
             </intent-filter>
         </activity>
-
-        <activity android:name=".DisplayMessageActivity"
-            android:parentActivityName="com.dawit.android.ad340.Main" />
-        <activity android:name=".Info"
-            android:parentActivityName="com.dawit.android.ad340.Main"/>
-        <activity android:name=".About"
-            android:parentActivityName="com.dawit.android.ad340.Main"></activity>
     </application>
 
 </manifest>

@@ -45,6 +45,7 @@ public class MovieList extends AppCompatActivity {
 
         recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(12));
 
+
         recylerViewLayoutManager = new LinearLayoutManager(context);
 
         recyclerView.setLayoutManager(recylerViewLayoutManager);
