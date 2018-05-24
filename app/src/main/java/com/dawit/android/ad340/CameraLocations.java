@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -83,11 +84,13 @@ public class CameraLocations extends FragmentActivity{
             JSONArray reader = json.getJSONArray("Features");
             for (int i = 0; i < reader.length(); i++) {
                 JSONObject feature = reader.getJSONObject(i);
+                JSONArray coordinate = feature.getJSONArray("PointCoordinate");
+                LatLng latLng = new LatLng(coordinate.getDouble(0), coordinate.getDouble(1));
                 JSONArray cameras = feature.getJSONArray("Cameras");
                 for (int j = 0; j < cameras.length(); j++) {
                     camera = cameras.getJSONObject(j);
                     cameraList.add(new Camera(camera.getString("Description"), camera.getString("ImageUrl"),
-                            camera.getString("Type")));
+                            camera.getString("Type"), latLng));
                 }
             }
             } catch(JSONException e){
@@ -104,15 +107,17 @@ public class CameraLocations extends FragmentActivity{
         return networkInfo;
     }
 
-    class Camera{
+    static class Camera{
         String description;
         String imageURL;
         String type;
+        LatLng latLng;
 
-        public Camera(String description, String imageURL, String type) {
+        public Camera(String description, String imageURL, String type, LatLng latLng) {
             this.description = description;
             this.imageURL = imageURL;
             this.type = type;
+            this.latLng = latLng;
         }
     }
 }

@@ -2,6 +2,7 @@ package com.dawit.android.ad340;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -30,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -37,16 +40,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+import java.sql.Time;
+import java.util.AbstractQueue;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+public class LocationActivity extends AppCompatActivity implements OnMapReadyCallback,
+        GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener{
 
     private Location locationValue;
     private GoogleApiClient mGoogleApiClient;
+    private ArrayList<CameraLocations.Camera> cameraList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
+        cameraList = new ArrayList<>();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -54,12 +69,13 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                 .addApi(LocationServices.API)
                 .build();
 
+        startDownload();
 
     }
 
     @Override
     protected void onStart() {
-        mGoogleApiClient.connect();
+
         super.onStart();
     }
 
@@ -105,6 +121,7 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             @Override
             public void onResponse(JSONObject response) {
                 updateFromDownload(response);
+                mGoogleApiClient.connect();
             }
         },
                 new Response.ErrorListener() {
@@ -127,18 +144,18 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
             JSONArray reader = json.getJSONArray("Features");
             for (int i = 0; i < reader.length(); i++) {
                 JSONObject feature = reader.getJSONObject(i);
+                JSONArray coordinate = feature.getJSONArray("PointCoordinate");
+                LatLng latLng = new LatLng(coordinate.getDouble(0), coordinate.getDouble(1));
                 JSONArray cameras = feature.getJSONArray("Cameras");
                 for (int j = 0; j < cameras.length(); j++) {
                     camera = cameras.getJSONObject(j);
                     cameraList.add(new CameraLocations.Camera(camera.getString("Description"), camera.getString("ImageUrl"),
-                            camera.getString("Type")));
+                            camera.getString("Type"), latLng));
                 }
             }
         } catch(JSONException e){
             Log.d("Error", e.getMessage());
         }
-
-        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -155,6 +172,29 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         map.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title("Your location"));
+
+        int index = 0;
+        for(CameraLocations.Camera camera: cameraList){
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .position(camera.latLng).title(camera.description));
+            marker.setZIndex(index++);
+
+        }
+        final Context context = getApplicationContext();
+        map.setInfoWindowAdapter(new MyCustomInfoViewAdapter(this, cameraList));
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                marker.showInfoWindow();
+            }
+        });
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                    marker.showInfoWindow();
+                    return true;
+            }
+        });
 
     }
 
