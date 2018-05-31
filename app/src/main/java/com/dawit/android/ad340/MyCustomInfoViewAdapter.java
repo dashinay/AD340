@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
@@ -23,6 +24,7 @@ class MyCustomInfoViewAdapter implements GoogleMap.InfoWindowAdapter {
     private final ImageLoader mImageLoader;
     private Context context;
     private ArrayList<CameraLocations.Camera> cameraList;
+    private Marker markerRef;
 
     MyCustomInfoViewAdapter(Context context, ArrayList cameraList) {
         this.context = context;
@@ -55,22 +57,19 @@ class MyCustomInfoViewAdapter implements GoogleMap.InfoWindowAdapter {
     private void render(Marker marker, View view) {
         NetworkImageView image = view.findViewById(R.id.image);
         TextView textView = view.findViewById(R.id.textView);
-
+        markerRef = marker;
         int index = (int)marker.getZIndex();
-        //for(int i = 0; i < cameraList.size(); i ++){
-            //if(cameraList.get(i).description.equals(marker.getTitle())){
-                textView.setText(cameraList.get(index).description);
+        textView.setText(cameraList.get(index).description);
+        String url = "";
                 if(cameraList.get(index).type.equals("sdot")) {
-                    image.setImageUrl(" http://www.seattle.gov/trafficcams/images/" + cameraList
-                            .get(index).imageURL, mImageLoader);
+                    url = "http://www.seattle.gov/trafficcams/images/" + cameraList
+                            .get(index).imageURL;
                 }
                 else{
-                    image.setImageUrl("http://images.wsdot.wa.gov/nw/" + cameraList
-                            .get(index).imageURL, mImageLoader);
+                    url = "http://images.wsdot.wa.gov/nw/" + cameraList
+                            .get(index).imageURL;
                 }
+                image.setImageUrl(url, mImageLoader);
                 image.isInLayout();
-            //}
-        //}
-
     }
 }

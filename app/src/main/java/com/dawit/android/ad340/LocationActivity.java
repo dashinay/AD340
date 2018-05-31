@@ -88,16 +88,6 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
     @Override
     public void onConnected(Bundle bundle) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        locationValue = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (locationValue != null) {
-            MapFragment mapFragment = (MapFragment) getFragmentManager()
-                    .findFragmentById(R.id.map);
-            mapFragment.getMapAsync(this);
-        }
-        else {
             new AlertDialog.Builder(LocationActivity.this)
                     .setTitle("Please activate location")
                     .setMessage("Click ok to goto settings else exit.")
@@ -113,6 +103,15 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
                         }
                     })
                     .show();
+            return;
+        }else {
+            locationValue = LocationServices.FusedLocationApi.getLastLocation(
+                    mGoogleApiClient);
+            if (locationValue != null) {
+                MapFragment mapFragment = (MapFragment) getFragmentManager()
+                        .findFragmentById(R.id.map);
+                mapFragment.getMapAsync(this);
+            }
         }
     }
 
@@ -191,6 +190,8 @@ public class LocationActivity extends AppCompatActivity implements OnMapReadyCal
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                    marker.showInfoWindow();
+                    marker.hideInfoWindow();
                     marker.showInfoWindow();
                     return true;
             }

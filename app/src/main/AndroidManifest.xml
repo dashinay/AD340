@@ -23,7 +23,13 @@
         <activity
             android:name=".FullInfo"
             android:parentActivityName=".MovieList" />
-        <activity android:name=".Main" />
+        <activity android:name=".Main">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".DisplayMessageActivity"
             android:parentActivityName=".Main" />
@@ -33,15 +39,11 @@
         <activity
             android:name=".About"
             android:parentActivityName=".Main" />
-        <activity android:name=".CameraLocations">
-
+        <activity android:name=".CameraLocations"
+            android:parentActivityName=".Main">
         </activity>
-        <activity android:name=".LocationActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+        <activity android:name=".LocationActivity"
+                  android:parentActivityName=".Main">
         </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"

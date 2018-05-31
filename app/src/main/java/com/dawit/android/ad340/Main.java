@@ -48,6 +48,14 @@ public class Main extends AppCompatActivity {
                                 Intent intent2= new Intent(getApplicationContext(), About.class);
                                 startActivity(intent2);
                                 break;
+                            case R.id.nav_location:
+                                Intent intent3 = new Intent(getApplicationContext(), LocationActivity.class);
+                                startActivity(intent3);
+                                break;
+                            case R.id.nav_traffic_cameras:
+                                Intent intent4 = new Intent(getApplicationContext(), CameraLocations.class);
+                                startActivity(intent4);
+                                break;
                         }
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
@@ -81,7 +89,9 @@ public class Main extends AppCompatActivity {
             intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
         }
-        Toast.makeText(getApplicationContext(),"Please enter the value", Toast.LENGTH_LONG).show();
+        else {
+            Toast.makeText(getApplicationContext(), "Please enter the value", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

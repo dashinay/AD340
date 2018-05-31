@@ -9,5 +9,13 @@
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_business_black_24px"
             android:title="About" />
+        <item
+            android:id="@+id/nav_traffic_cameras"
+            android:icon="@drawable/ic_baseline_traffic_24px"
+            android:title="Traffic Cameras" />
+        <item
+            android:id="@+id/nav_location"
+            android:icon="@drawable/ic_baseline_location_on_24px"
+            android:title="Location Location Location" />
     </group>
 </menu>
