@@ -5,7 +5,7 @@ android {
         key_config {
             keyAlias 'AD340Key'
             keyPassword 'dashinaya'
-            storeFile file('C:/tempFolder/keystore/key.jks')
+            storeFile file('/key/ad340key.jks')
             storePassword 'dashinaya'
         }
     }
